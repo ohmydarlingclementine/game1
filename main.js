@@ -110,3 +110,43 @@ function play_game() {
       if (platform.type === "breakable") platform.broken = true;
       player.jump();
     }
+if (!platform.passed && platform.y > player.y) {// if the player gets on the platform the score increases
+      score++;
+      platform.passed = true;
+    }
+
+    if (platform.broken) {  // if broken erase it
+      platforms.splice(i, 1);
+      continue;
+    }
+
+    if (platform.y > height) { // if the platform goes under make a new one
+      platforms.splice(i, 1);
+      spawn_platform();
+    }
+  }
+
+  // platforms and player's going down situation
+  if (player.y < height / 2) {
+    const diff = height / 2 - player.y;
+    player.y = height / 2;
+
+    for (const platform of platforms) {
+      platform.y += diff;
+
+      if (platform.type === "moving" && platform.axis === "y") {
+        platform.start_y += diff;
+      }
+    }
+  }
+
+  if (player.y > height) game_state = "gameover"; // if player goes under the screen game ends
+
+
+  while (platforms.length < 15) spawn_platform();
+}
+
+function reset_game() {
+  score = 0;
+  player = new Player();
+  platforms = [];
