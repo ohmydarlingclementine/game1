@@ -69,3 +69,44 @@ function draw_start_screen() {
   text("Green: stable  |  Blue: moves right and left  |  Yellow: moves up and down", width / 2, height / 2 + 95);
   text("Red: fragile (it breaks when you press it)", width / 2, height / 2 + 125);
 }
+
+// losing screen
+function draw_game_over_screen() {
+  textAlign(CENTER);
+
+  textSize(32);
+  fill(200, 0, 0);
+  text("YOU LOST!", width / 2, height / 2 - 40);
+
+  textSize(20);
+  fill(255, 100, 100); // pastel kırmızı gibi
+  text("YOUR SCORE: " + score, width / 2, height / 2);
+
+  textSize(16);
+  fill(0);
+  text("Press R or Space to play again", width / 2, height / 2 + 40);
+}
+
+// game's main mode
+function play_game() {
+  // score text
+  fill(0);
+  textAlign(LEFT);
+  textSize(20);
+  text("Score " + score, 10, 30);
+
+  player.update();
+  player.show();
+
+  // check the platforms one by one
+  for (let i = platforms.length - 1; i >= 0; i--) {
+    const platform = platforms[i];
+
+    platform.update();
+    platform.show();
+
+    // if player falls to the platform again it breaks
+    if (player.velocity > 0 && player.lands_on(platform)) {
+      if (platform.type === "breakable") platform.broken = true;
+      player.jump();
+    }
