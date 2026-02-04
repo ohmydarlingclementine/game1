@@ -2,6 +2,8 @@ let player;
 let platforms = [];
 let score = 0;
 let game_state = "start";
+// controls which screen is shown
+
 
 // physical main settings
 const GRAVITY = 0.4;
@@ -12,7 +14,7 @@ const MOVE_SPEED = 5;
 const PLATFORM_WIDTH = 80;
 const PLATFORM_HEIGHT = 15;
 
-// the edges of the platform
+// prevents platforms from spawning too close to screen edges
 const EDGE_MARGIN = 10;
 
 // the vertical space between the platforms
@@ -32,13 +34,17 @@ function setup() {
 
 function draw() {
   background(220);
+    // clears the screen every frame
+
 
   
   // check the state of the game w this (start: started, gameover: ended)
   if (game_state === "start") return draw_start_screen();
   if (game_state === "gameover") return draw_game_over_screen();
+    // if player lost, show game over screen
 
   play_game();
+    // otherwise run the main game logic
 }
 
 function keyPressed() { // Space / Enter / R / r when u press these
@@ -46,11 +52,14 @@ function keyPressed() { // Space / Enter / R / r when u press these
     game_state = "playing";
     reset_game();
   }
+    // starts the game from the menu
+
 
   if (game_state === "gameover" && (key === "r" || key === "R" || key === " ")) {
     game_state = "playing";
     reset_game();
   }
+  // restarts the game after losing
 }
 
 // main screen 
@@ -95,9 +104,14 @@ function play_game() {
   textAlign(LEFT);
   textSize(20);
   text("Score " + score, 10, 30);
+  // display current score
 
   player.update();
+    // applies gravity and movement
+
   player.show();
+    // draws the player
+
 
   // check the platforms one by one
   for (let i = platforms.length - 1; i >= 0; i--) {
@@ -108,26 +122,37 @@ function play_game() {
 
     // if player falls to the platform again it breaks
     if (player.velocity > 0 && player.lands_on(platform)) {
+
       if (platform.type === "breakable") platform.broken = true;
       player.jump();
+            // resets vertical velocity
+
     }
 
     if (!platform.passed && platform.y > player.y) {// if the player gets on the platform the score increases
       score++;
       platform.passed = true;
     }
+        // score increases only once per platform
 
+
+    
     if (platform.broken) {  // if broken erase it
       platforms.splice(i, 1);
       continue;
     }
+        // remove broken platforms
+
 
     if (platform.y > height) { // if the platform goes under make a new one
       platforms.splice(i, 1);
       spawn_platform();
+          // recycle platforms that fall off screen
+
     }
   }
-
+  
+//CAMERA SCROLL ILLUSION
   // platforms and player's going down situation
   if (player.y < height / 2) {
     const diff = height / 2 - player.y;
@@ -148,15 +173,18 @@ function play_game() {
   while (platforms.length < 15) spawn_platform();
 }
 
+
 function reset_game() {
   score = 0;
   player = new Player();
   platforms = [];
+  
 
   // the lowest platform
   const ground = new Platform(0, height - 20, "normal", width);
   ground.passed = true;
   platforms.push(ground);
+  
 
   const start_y = height - 20 - 95;
   const first_x = random(EDGE_MARGIN, width - PLATFORM_WIDTH - EDGE_MARGIN);
@@ -164,6 +192,7 @@ function reset_game() {
 
   while (platforms.length < 18) spawn_platform();
 }
+
 
 // finds the highest platform on the screen (y the lowest)
 function the_highest_platform() {
@@ -273,6 +302,8 @@ class Player {
     // the ones go from right goes left (wrap)
     if (this.x > width) this.x = 0;
     if (this.x < 0) this.x = width;
+
+
   }
 
   // players shape
