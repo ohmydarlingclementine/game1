@@ -9,6 +9,7 @@ let game_state = "start";
 const GRAVITY = 0.4;
 const JUMP_FORCE = -10;
 const MOVE_SPEED = 5;
+// sag sol
 
 // the size of the platform
 const PLATFORM_WIDTH = 80;
@@ -26,6 +27,7 @@ const TRY_COUNT = 12;
 
 // the chanche for another bigger gap
 const BIG_GAP_CHANCE = 0.12;
+//12 sans 8 taneden 1 i zorlastirdi
 
 function setup() {
   createCanvas(600, 800); // make the screen 600x800 
@@ -40,8 +42,11 @@ function draw() {
   
   // check the state of the game w this (start: started, gameover: ended)
   if (game_state === "start") return draw_start_screen();
+  
   if (game_state === "gameover") return draw_game_over_screen();
-    // if player lost, show game over screen
+    // oyun su an hangi durumda return der dur
+
+
 
   play_game();
     // otherwise run the main game logic
