@@ -138,7 +138,7 @@ function play_game() {
       score++;
       platform.passed = true;
     }
-        // score increases only once per platform
+        // gectikce puan
 
 
     
@@ -157,7 +157,7 @@ function play_game() {
     }
   }
   
-//CAMERA SCROLL ILLUSION
+//kamera efekti
   // platforms and player's going down situation
   if (player.y < height / 2) {
     const diff = height / 2 - player.y;
@@ -176,6 +176,8 @@ function play_game() {
 
 
   while (platforms.length < 15) spawn_platform();
+    // find the highest platform to place new one above it
+
 }
 
 
@@ -241,7 +243,9 @@ function spawn_platform() {
   }
 
   let gap = ref.y - chosen_y;
+  //İki platform arasındaki dikey mesafe
   let dxMax = 170 - gap * 0.75;
+  //yatay mesafeyi, dikey mesafeye göre
   if (dxMax < 60) dxMax = 60;
   if (dxMax > 220) dxMax = 220;
 
@@ -255,9 +259,11 @@ function spawn_platform() {
     let y = chosen_y + random(-6, 6);
 
     if (can_put_platform(x, y, w)) {
+      //platform koymak icin guvenli alan mi
       chosen_x = x;
       chosen_y = y;
       break;
+      //loop durur bulunca
     }
 
     if (i === 5) chosen_y = ref.y - random(GAP_MIN, GAP_MAX);
